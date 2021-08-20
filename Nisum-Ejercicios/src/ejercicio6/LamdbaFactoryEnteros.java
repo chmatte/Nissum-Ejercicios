@@ -1,6 +1,7 @@
 package ejercicio6;
 
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 public class LamdbaFactoryEnteros {
 	public static void main(String... args) {
@@ -10,23 +11,23 @@ public class LamdbaFactoryEnteros {
 				if (parametros.length > 1) {
 					switch (parametros[0]) {
 					case "1":
-						System.out.println(isOdd().test(Integer.parseInt(parametros[1]))?"ODD":"EVEN");
+						System.out.println(isOdd().test(Integer.parseInt(parametros[1])) ? "ODD" : "EVEN");
 						break;
 					case "2":
-						System.out.println(isPrime().test(Integer.parseInt(parametros[1]))?"PRIME":"COMPOSITE");
+						System.out.println(isPrime().test(Integer.parseInt(parametros[1])) ? "PRIME" : "COMPOSITE");
 						break;
 					case "3":
-						System.out.println(isPalindrome().test(Integer.parseInt(parametros[1]))?"PALINDROME":"NOT A PALINDROME");
+						System.out.println(isPalindrome().test(Integer.parseInt(parametros[1])) ? "PALINDROME"
+								: "NOT A PALINDROME");
 						break;
 					}
 				}
 			} catch (NumberFormatException e) {
 				System.out.println("Not an Integer");
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			
+
 		}
 	}
 
@@ -37,21 +38,14 @@ public class LamdbaFactoryEnteros {
 	}
 
 	public static Predicate<Integer> isPrime() {
-		return i -> {
-			if(i<1) {
+
+		return number -> {
+			if (number < 1)
 				return false;
-			}
-			if(i==1) {
-				return true;
-			}
-			for (int j = 2; j < Math.sqrt(i); j++) {
-				if (i % j == 0)
-					return false;
-			}
-			return true;
+			return Stream.iterate(2, i -> i <= Math.sqrt(number), i -> i + 1).allMatch(i -> number % i != 0);
 		};
 	}
-	
+
 	public static Predicate<Integer> isPalindrome() {
 		return i -> {
 			String intStrings = Integer.toString(i);
